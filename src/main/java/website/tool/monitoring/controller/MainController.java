@@ -86,7 +86,7 @@ public class MainController {
                             @RequestParam String maxSize,
                             @RequestParam String period,
                             @RequestParam String responseTime,
-                            @RequestParam String responseCode) throws ParseException {
+                            @RequestParam String responseCode) throws Exception {
         Url newUrl = new Url(Objects.equals(period, "")?null:sp.parse(period),
                responseTime,
               responseCode,minSize,maxSize ,extra);

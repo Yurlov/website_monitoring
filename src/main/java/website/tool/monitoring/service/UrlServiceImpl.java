@@ -19,7 +19,8 @@ public class UrlServiceImpl implements UrlService {
     }
 
     private UrlRepository urlRepository;
-
+    private final Pattern timeRes = Pattern.compile("([0-9]{1,8})\\/([0-9]{1,8})\\/([0-9]{1,8})");
+    private final Pattern p = Pattern.compile("^(https?:\\/\\/)?(www)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})(\\/)?");
     @Override
     public List<Url> findAll() {
         return urlRepository.findAll();
@@ -28,8 +29,7 @@ public class UrlServiceImpl implements UrlService {
     @Override
     @Transactional
     public void addUrl(Url url) throws Exception {
-        Pattern timeRes = Pattern.compile("([0-9]{1,8})\\/([0-9]{1,8})\\/([0-9]{1,8})");
-        Pattern p = Pattern.compile("^(https?:\\/\\/)?(www)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})(\\/)?");
+
         Matcher tm = timeRes.matcher(url.getTimeToResponseFromServer());
         if(!tm.matches()){
             throw new Exception("Wrong format of time to response from server");
@@ -72,8 +72,13 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     @Transactional
-    public void update(Long id, Url url) {
+    public void update(Long id, Url url) throws Exception {
     Url old = urlRepository.getOne(id);
+
+        Matcher m = timeRes.matcher(url.getTimeToResponseFromServer());
+        if(!m.matches()){
+            throw new Exception("Wrong format of time to response! Must be ok/warning/critical ");
+        }
         if(!Objects.equals(url.getExtra(), "")){
             old.setExtra(url.getExtra());
         }
