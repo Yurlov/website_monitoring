@@ -28,7 +28,12 @@ public class UrlServiceImpl implements UrlService {
     @Override
     @Transactional
     public void addUrl(Url url) throws Exception {
+        Pattern timeRes = Pattern.compile("([0-9]{1,8})\\/([0-9]{1,8})\\/([0-9]{1,8})");
         Pattern p = Pattern.compile("^(https?:\\/\\/)?(www)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})(\\/)?");
+        Matcher tm = timeRes.matcher(url.getTimeToResponseFromServer());
+        if(!tm.matches()){
+            throw new Exception("Wrong format of time to response from server");
+        }
         Matcher m = p.matcher(url.getNameUrl());
         if(!m.find()){
             throw new Exception("Url not available");
