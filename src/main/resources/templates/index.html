@@ -25,7 +25,7 @@
         <tr class="iterator"  th:each="url : ${urls}" >
             <td th:text="${url.id}"></td>
             <td th:text="${url.nameUrl}" ></td>
-            <td th:text="${url.result.timeToResponseFromServer}"> </td>
+            <td  th:text="${url.result.timeToResponseFromServer}"> </td>
             <td th:if="${url.responseCode } != ${url.result.responseCode}">
                 <span style="font-size: large; color: red" th:text="${url.result.responseCode}"></span>/<span th:text="${url.responseCode}"></span>
             </td>

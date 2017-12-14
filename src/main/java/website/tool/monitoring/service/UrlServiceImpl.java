@@ -28,10 +28,16 @@ public class UrlServiceImpl implements UrlService {
     @Override
     @Transactional
     public void addUrl(Url url) throws Exception {
-        Pattern p = Pattern.compile("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})");
+        Pattern p = Pattern.compile("^(https?:\\/\\/)?(www)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})(\\/)?");
         Matcher m = p.matcher(url.getNameUrl());
         if(!m.find()){
             throw new Exception("Url not available");
+        }
+        if(url.getNameUrl().startsWith("www")) {
+            url.setNameUrl("http://" + url.getNameUrl());
+        }
+        if(!url.getNameUrl().startsWith("www")&& !url.getNameUrl().startsWith("http")){
+            url.setNameUrl("http://www."+url.getNameUrl());
         }
         if(url.getNameUrl()==""||url.getExtra()==""||url.getMaxSize()==""||url.getMinSize()==""||url.getResponseCode()==""||url.getTimeToResponseFromServer()==""||url.getPeriod()==null){
             throw new Exception("Fields was empty");

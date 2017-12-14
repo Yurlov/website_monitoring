@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import website.tool.monitoring.domain.Result;
+import website.tool.monitoring.domain.Status;
 import website.tool.monitoring.domain.Url;
 import website.tool.monitoring.service.UrlSchedulerService;
 import website.tool.monitoring.service.UrlService;
@@ -58,7 +59,7 @@ public class MainController {
 
         Url url = new Url(nameUrl,period==""?null: sp.parse(period),
                responseTime,
-             String.valueOf(responseCode),String.valueOf(minSize),String.valueOf(maxSize),extra, new Result());
+             String.valueOf(responseCode),String.valueOf(minSize),String.valueOf(maxSize),extra, new Result(-1L,"-1","-1","Not found", Status.CRITICAL));
         urlService.addUrl(url);
         schedulerService.sendUrl(url);
 
