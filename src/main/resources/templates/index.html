@@ -83,7 +83,7 @@
 </form>
     </div>
     <div id="updateForm" class="forms" style="display: none; margin-top: 10px; padding-left: 10px">
-        <form th:action="@{/update}" method="PUT">
+        <form th:action="@{/update}" method="post">
             <h6 class="addInput">ID <input type="text" name="id"/></h6>
             <h6 class="addInput">Period <input class="period" type="datetime-local" name="period"/></h6>
             <h6 class="addInput">Code of Response <input type="text" name="responseCode"/></h6>

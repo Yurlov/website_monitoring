@@ -12,6 +12,7 @@ import website.tool.monitoring.domain.Status;
 import website.tool.monitoring.domain.Url;
 import website.tool.monitoring.repository.UrlRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,11 +30,10 @@ public class UrlSchedulerServiceImpl implements UrlSchedulerService {
     //every 9s send request to all ulrs
     @Scheduled(fixedRate = 9000)
     private void run() throws Exception  {
-        urlRepository.findAll().parallelStream().forEach(this::sendUrl);
+        urlRepository.findAll().forEach(this::sendUrl);
     }
 
     public void sendUrl(Url url)  {
-
         if(url.getPeriod().getTime() < new Date().getTime()){
             return;
         }

@@ -79,7 +79,7 @@ public class MainController {
         return "index :: urlList";
     }
 
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
     public String updateUrl(@RequestParam  Long id,
                             @RequestParam String extra,
                             @RequestParam String minSize,
