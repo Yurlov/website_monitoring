@@ -18,16 +18,16 @@ public class MonitoringApplication {
 		SpringApplication.run(MonitoringApplication.class, args);
 	}
 
-// 	@Bean
-// 	public CommandLineRunner demo(final UrlService urlService, final UrlSchedulerService schedulerService) {
-// 		return strings -> Db.fillDb().forEach(url -> {
-//             try {
-//                 urlService.addUrl(url);
-//                 schedulerService.sendUrl(url);
+	@Bean
+	public CommandLineRunner demo(final UrlService urlService, final UrlSchedulerService schedulerService) {
+		return strings -> Db.fillDb().forEach(url -> {
+            try {
+                urlService.addUrl(url);
+                schedulerService.sendUrl(url);
 
-//             } catch (Exception e) {
-//                 e.printStackTrace();
-//             }
-//         });
-// 	}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+	}
 }
