@@ -76,7 +76,7 @@ public class UrlServiceImpl implements UrlService {
     Url old = urlRepository.getOne(id);
 
         Matcher m = timeRes.matcher(url.getTimeToResponseFromServer());
-        if(!m.matches()){
+        if(!m.matches()&&url.getTimeToResponseFromServer()!=""){
             throw new Exception("Wrong format of time to response! Must be ok/warning/critical ");
         }
         if(!Objects.equals(url.getExtra(), "")){
