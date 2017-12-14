@@ -1,0 +1,23 @@
+#WebSite Monitoring Tool
+
+
+Server-side:
+By default every 9 seconds server is checking all url
+Three status for url (OK,WARNING,CRITICAL) and one more (REPAIR) its like if some developer trying to solve this problem
+Extra field its substring which must be in response! if there no this field status will be CRITICAL and extra field sets 'Not found'
+
+Client-side:
+By default script sends request to server every 12 seconds and render all changes
+You can click "pause" (script) then status will change to 'REPAIR' and this url will not be check or "play" and then url will check again
+You can delete url by click to 'X' and also create new url or update url by clicking on buttons (NEW)(UPDATE)
+Two signals will run when status changed to 'WARNING' or to 'CRITICAL'
+
+Running:
+Using MySQL DB ( you should set your db settings in application.properties )
+spring.datasource.username= your nameUrl
+spring.datasource.password= your password
+spring.datasource.url=jdbc:mysql://your host : your port/ nameUrl of database?useSSL=false
+
+
+Build project by command $[baseDir]/mvn clean package
+Run app by command $[baseDir]/java -jar target/monitoring-0.0.1-SNAPSHOT.jar

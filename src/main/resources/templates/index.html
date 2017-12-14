@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head >
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Monitoring Tool</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+          crossorigin="anonymous"/>
+</head>
+<body class="content">
+<div th:fragment="urlList" class="table-block ">
+    <h1>Website Monitoring Tool</h1>
+    <table  class="table col-lg-7">
+        <tr class="headT">
+            <th>ID</th>
+            <th>URL</th>
+            <th>Response Time</th>
+            <th>Response Code</th>
+            <th>Time Period</th>
+            <th>Size</th>
+            <th>Extra</th>
+            <th>Status</th>
+        </tr>
+        <tr class="iterator"  th:each="url : ${urls}" >
+            <td th:text="${url.id}"></td>
+            <td th:text="${url.nameUrl}" ></td>
+            <td th:text="${url.result.timeToResponseFromServer}"> </td>
+            <td th:if="${url.responseCode } != ${url.result.responseCode}">
+                <span style="font-size: large; color: red" th:text="${url.result.responseCode}"></span>
+            </td>
+            <td th:if="${url.responseCode } == ${url.result.responseCode}">
+                <span th:text="${url.result.responseCode}"></span>
+            </td>
+            <td><span th:text="${#dates.format(url.period, 'yyyy-MM-dd HH:mm')}"></span></td>
+            <td th:if="${url.result.size} &lt; ${url.minSize} OR ${url.result.size} &gt; ${url.maxSize} ">
+                <span style="color: red; font-size: large" th:text="${url.result.size}"></span>
+            </td>
+            <td th:if="${url.result.size} &gt; ${url.minSize} AND ${url.result.size} &lt; ${url.maxSize}">
+                <span th:text="${url.result.size}"></span>
+            </td>
+
+            <td style="font-size: large; color: red" th:if="${url.result.extra} == 'Not found'" th:text="${url.result.extra}"></td>
+            <td th:if="${url.result.extra} != 'Not found'" th:text="${url.result.extra}"></td>
+
+            <td th:switch="${url.result.status}">
+                <span  style="color: yellow; font-size: large" th:case="${url.result.status.WARNING}" th:value="${url.result.status}" th:text="${url.result.status}"></span>
+                <span  style="color: red; font-size: large" th:case="${url.result.status.CRITICAL}" th:value="${url.result.status}" th:text="${url.result.status}"></span>
+                <span  style="color: green;font-size: medium" th:case="${url.result.status.OK}" th:value="${url.result.status}" th:text="${url.result.status}"></span>
+                <span  style="color: blue;font-size: medium" th:case="${url.result.status.REPAIR}" th:value="${url.result.status}" th:text="${url.result.status}"></span>
+            </td>
+            <td th:switch="${url.pauseOrPlay}">
+                <span th:case="true">
+                    <button  th:onclick="${'getPlay(' +url.id + ');'}"   style="display: block" class="button"   type="button" ><img  width="10" height="10"  th:src="@{/images/pause.png}" src="../static/images/pause.png"/></button>
+                </span>
+                <span th:case="false">
+                    <button  th:onclick="${'getPlay(' +url.id + ');'}"  style="display: block" class="button"    type="button" ><img  width="10" height="10"  th:src="@{/images/play.png}" src="../static/images/play.png"/></button>
+                </span>
+            </td>
+            <td>
+                <button th:onclick="${'deleteUrl(' +url.id + ');'}"   type="button" class="button"> <img  width="20px" height="20px" th:src="@{/images/img2.png}" src="../static/images/img2.png"/> </button>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+    <div class="but" >
+        <input  type="button" onclick="showAdd()" class="btn btn-md btn-success"  value="New"/>
+        <input  type="button" onclick="showUpdate()" class="btn btn-md btn-warning"  value="Update"/>
+    </div>
+
+<div id="addForm" class="forms"  style="display: none; margin-top: 10px; padding-left: 10px">
+<form th:action="@{/add}" method="post">
+    <h6 class="addInput">Url <input type="text" id="name" name="nameUrl"/></h6>
+    <h6 class="addInput">Period <input class="period" type="datetime-local"  id="period" name="period"/></h6>
+    <h6 class="addInput">Code of Response <input type="text" id="responseCode" name="responseCode"/></h6>
+    <h6 class="addInput">Response time <input type="text" id="responseTime" name="responseTime" placeholder="ok/warning/critical"/></h6>
+    <h6 class="addInput">Extra <input type="text" id="extra" name="extra"/></h6>
+    <h6 class="addInput">Min Size <input type="text" id="minSize" name="minSize"/></h6>
+    <h6 class="addInput">Max Size <input type="text" id="maxSize" name="maxSize"/></h6>
+    <input  class="addInput btn btn-lg btn-success"  type="submit" value="OK"/>
+</form>
+    </div>
+    <div id="updateForm" class="forms" style="display: none; margin-top: 10px; padding-left: 10px">
+        <form th:action="@{/update}" method="PUT">
+            <h6 class="addInput">ID <input type="text" name="id"/></h6>
+            <h6 class="addInput">Period <input class="period" type="datetime-local" name="period"/></h6>
+            <h6 class="addInput">Code of Response <input type="text" name="responseCode"/></h6>
+            <h6 class="addInput">Response time <input type="text" name="responseTime" placeholder="ok/warning/critical" /></h6>
+            <h6 class="addInput">Extra <input type="text" name="extra"/></h6>
+            <h6 class="addInput">Min Size <input type="text" name="minSize"/></h6>
+            <h6 class="addInput">Max Size <input type="text" name="maxSize"/></h6>
+            <input  class="addInput btn btn-lg btn-success" type="submit" value="OK"/>
+        </form>
+    </div>
+
+    <link th:href="@{/css/index.css}"  rel="stylesheet"/>
+    <script th:src="@{/js/index.js}" type="text/javascript" ></script>
+    <script th:src="@{/js/jquery-3.2.1.min.js}"  ></script>
+    <audio id="audioC" th:src="@{/audio/audio1.wav}"></audio>
+    <audio id="audioW" th:src="@{/audio/audio2.wav}"></audio>
+
+</body>
+</html>

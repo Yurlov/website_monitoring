@@ -1,0 +1,32 @@
+.button{
+    background-image: none;
+    background-color: transparent;
+    border: none
+}
+.content{
+    background-color:aliceblue;
+}
+h1 {
+    margin-left: 30px;
+}
+.table{
+    border: rgba(8,8,8,0.94);
+    height: 600px;
+    overflow: auto ;
+    display: block;
+}
+.headT th{
+    font-size: 14px;
+    padding-right: 30px;
+    text-align: center;
+}
+.iterator{
+    font-size: 15px;
+    text-align: center
+}
+.table-block{
+    float: left;
+}
+.but{
+    margin-top: 40px;
+}
